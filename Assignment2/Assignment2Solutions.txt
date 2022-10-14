@@ -1,0 +1,87 @@
+Solutions document for Assignments 2-4, 2-5, & 2-6
+Author: Jacob Burke
+
+4. [15] Convert the following hex values to decimal assuming that they are stored as 32-bit 2s
+complement integers.
+
+
+a. (5) 0x000000C6
+	 0000-0000-0000-0000-0000-0000-1100-0110
+	 Most significant bit is zero so positive result
+	 2^7 + 2^6 + 2^2 + 2^1 =
+	 Answer: 198
+
+b. (5) 0xFFFFFEC4
+	 1111-1111-1111-1111-1111-1110-1100-0100
+	 Most significant bit is one so negative result
+	 -2^31 + sum of 2^30 through 2^9 + 2^7 + 2^6 + 2^2 =
+	 -2147483648 + 2147483136 + 128 + 64 + 4 = 
+	 Answer: -316
+
+c. (5) 0xFFFFFFFF
+	 1111-1111-1111-1111-1111-1111-1111-1111
+	 Most significant bit is one so negative result
+	 -2^31 + sum of 2^30 through 2^1 =
+	 Answer: 1
+
+
+5. [15] Convert the following hex values to decimal assuming that they are encoded as IEEE 754
+single-precision floating-point numbers:
+
+
+a. (5) 0x80000000
+	 1000-0000-0000-0000-0000-0000-0000-0000
+	 Sign bit: 1
+	 Exponent bits: 0 - 127 = -127
+	 Fraction bits: 0
+	 Answer: -0
+
+b. (5) 0x3FC00000
+	 0011-1111-1100-0000-0000-0000-0000-0000
+	 Sign bit: 0
+	 Exponent bits: 011-1111-1
+			    127 -127 = 0
+	 Fraction bits: 100-0000-0000-0000-0000-0000
+			    2^-1 = 0.5
+	 Calculation:   (-1)^0 * (1 + 0.5) * 2^0 =
+	 Answer: 1.5
+
+c. (5) 0xC1340000
+	 1100-0001-0011-0100-0000-0000-0000-0000
+	 Sign bit: 1
+	 Exponent bits: 100-0001-0
+			    (2^7+ 2^1) - 127 = 130 - 127 = 3
+	 Fraction bits: 011-0100-0000-0000-0000-0000
+			    2^-2 + 2^-3 + 2^-5
+			    1/4 + 1/8 + 1/32 = 13/32
+	 Calculation:   (-1)^1 * (1 + 0.40625) * 2^3
+	 Answer: -11.25
+
+
+6. [15] Convert the following decimal numbers to hex encoded as IEEE 754 single-precision
+floating-point numbers. Write your answers in your solutions document.
+
+
+a. (5) 1.0
+	 Signed bit: 0
+	 Exponent bits: 127 -127 = 0
+	 Fraction bits: 0
+	 Final Answer: 0x3F800000
+
+
+b. (5) 16.5
+	 Signed bit: 0
+	 16.5 / 2^4 = 1.03125
+	 Exponent bits: 4 + 127 = 131 = 10000011
+	 Fraction bits: 2^-5 = 0000100
+	 Final Answer: 0100-0001-1000-0100-0000-0000-0000-0000
+			   0x41840000
+
+
+c. (5) -314.75
+	 Signed bit: 1
+	 314.75 / 2^8 = 1.2294921875
+	 Exponent bits: 8 + 127 = 135 = 10000111
+	 Fraction: 2^-3 + 2^-4 + 2^-5 + 2^-7 + 2^-9 + 2^-10 = 0011101011
+	 Final Answer: 1100-0011-1001-1101-0110-0000-0000-0000
+			   0xC39D6000
