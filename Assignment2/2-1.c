@@ -1,20 +1,20 @@
 #include <stdio.h>
 #define UI unsigned int
 
-int oddBit(UI x) {
-	UI oddMask = 0xAAAAAAAA; //mask to isolate odd bits
-	UI oddNum = x & oddMask; //isolating odd bits
-	int result = !!oddNum; //returns 0 if oddNum only zeroes, 1 if otherwise
+UI mask(int n) {
+	int shiftAmnt = 32 - n; //amount to he shifted to right
+	UI Mask = 0xFFFFFFFF; //mask of all ones
+	UI result = Mask >> shiftAmnt;
 	return result;
 }
 
 
 int main() {
-	printf("oddBit(0x%01X): %d\n", 0x1, oddBit(0x1));
-	printf("oddBit(0x%01X): %d\n", 0x2, oddBit(0x2));
-	printf("oddBit(0x%01X): %d\n", 0x3, oddBit(0x3));
-	printf("oddBit(0x%01X): %d\n", 0x4, oddBit(0x4));
-	printf("oddBit(0x%01X): %d\n", 0xFFFFFFFF, oddBit(0xFFFFFFFF));
-	printf("oddBit(0x%01X): %d\n", 0xAAAAAAAA, oddBit(0xAAAAAAAA));
-	printf("oddBit(0x%01X): %d\n", 0x55555555, oddBit(0x55555555));
+	printf("mask(%d): 0x%01X\n", 1, mask(1));
+	printf("mask(%d): 0x%01X\n", 2, mask(2));
+	printf("mask(%d): 0x%01X\n", 3, mask(3));
+	printf("mask(%d): 0x%01X\n", 5, mask(5));
+	printf("mask(%d): 0x%01X\n", 8, mask(8));
+	printf("mask(%d): 0x%01X\n", 16, mask(16));
+	printf("mask(%d): 0x%01X\n", 31, mask(31));
 }	
