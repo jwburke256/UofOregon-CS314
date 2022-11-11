@@ -1,0 +1,93 @@
+# Execution begins at address 0 
+    .pos 0
+    irmovq stack, %rsp      # Set up stack pointer
+    call main       # Execute main program
+    halt            # Terminate program 
+
+# Array of 10 elements
+    .align 8
+array:  
+
+    .quad 0x000000000005
+    .quad 0x000000000004
+    .quad 0x000000000003
+    .quad 0x000000000002
+    .quad 0x000000000001
+    .quad 0x000000000006
+    .quad 0x000000000007
+    .quad 0x000000000008
+    .quad 0x000000000009
+    .quad 0x000000000010
+
+
+# move commands:
+#    i: immediate value
+#    r: register
+#    m: memory
+#    format: XXmovq where X's are i, r, or m
+
+main:   
+    irmovq array,%rdi #move array starting location into registers
+    irmovq $10,%rsi
+    call sort       # sort(array, 10)
+    ret
+
+swap:
+    mrmovq (%r8), %rax # go to location pointer at r8, 
+                       # move that value int rax
+    mrmovq (%r9), %rcx # same but for r9
+    rmmovq %rcx, (%r8) # move contents of rcx into address pointed at by r8
+    rmmovq %rax, (%r9) 
+    ret
+    
+sort:
+    isubq $1,%rsi # %rsi = len-1
+    sortloop:
+        rrmovq %rdi,%r8 #r8 = i (i is starting index pntr location)
+        rrmovq %rdi, %r9 #r9 = i
+        iaddq $8,%r9 # r9 = i+1
+        rrmovq %rsi, %r12 #initialize for loop counter
+        irmovq $1, %rdx# sort register is true
+        arrTraverse:
+            mrmovq (%r8), %r10 #r10 = arr[i] val
+            mrmovq (%r9), %r11 #r11 = arr[i+1] val
+            rrmovq %r11, %r14 #r14 set for subq and conditional check
+            subq %r10, %r14 #sets up > comparison
+            jg bypass #jump past swap if in sorted order at this point 
+            call swap
+            irmovq $0,%rdx # sort reg is now false
+            bypass:
+                #increment pointers for array
+                iaddq $8,%r8 # r8 = increment i
+                iaddq $8,%r9 # r9 = increment i+1
+                isubq $1,%r12 # decrese for loop counter
+                jg arrTraverse
+        #decrease length for loop
+        isubq $1,%rsi
+        isubq $1,%rdx # prepare for jl
+        jl sortloop # jump to sortloop if %rdx < 0
+        
+        #decrease length of next loop by adjusting %rsi
+    ret #list is sorted if jump doesn't occur
+
+    .pos 0x200
+stack:
+
+#registers
+#%rax = return, swap 1st temp
+#%rcx = swap 2nd temp
+#%rdx = sort reg (true or false/0 or 1)
+#%rbx
+#%rsp = stack pointer
+#%rbp
+#%rsi = length of array - 1
+#%rdi = start of array pointer
+#%r8 = i or arr[i]
+#%r9 = i+1 or arr[i+1]
+#%r10 = arr[i] val
+#%r11 = arr[i+1] val
+#%r12 = for loop counter
+#%r13
+#%r14 = check register
+
+
