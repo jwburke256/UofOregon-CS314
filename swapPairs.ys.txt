@@ -1,0 +1,65 @@
+# Execution begins at address 0 
+    .pos 0
+    irmovq stack, %rsp      # Set up stack pointer
+    call main       # Execute main program
+    halt            # Terminate program 
+
+# Array of 4 elements
+    .align 8
+array:  
+    .quad 0x000000000010
+    .quad 0x000000000009
+    .quad 0x000000000008
+    .quad 0x000000000007
+    .quad 0x000000000006
+    .quad 0x000000000005
+    .quad 0x000000000004
+    .quad 0x000000000003
+    .quad 0x000000000002
+    .quad 0x000000000001
+
+
+# move commands:
+#    i: immediate value
+#    r: register
+#    m: memory
+#    format: XXmovq where X's are i, r, or m
+
+main:   
+    irmovq array,%rdi
+    irmovq $10,%rsi
+    call swapPairs       # swapPairs(array, 10)
+    ret
+
+
+swapPairs:
+    #a[0] in r8 and r9
+    rrmovq %rdi, %r8
+    rrmovq %rdi, %r9
+#    irmovq $8, %r14
+#    addq %r14, %r9 # r9 = a[1]
+    iaddq $8, %r9 # r9 = a[1]
+    
+    loop:
+        # 1
+        call swap
+        # 2 increment pointers
+        iaddq $16, %r8
+        iaddq $16, %r9
+        # 3 decrement counter and conditional jump
+        isubq $2, %rsi # instead of decrementing by 1 over 5
+                       # decrement by 2 over 10
+        jg loop # jne $0, %rsi also works
+        
+    ret
+
+swap:
+    mrmovq (%r8), %rax # go to location pointer at r8, 
+                       # move that value int rax
+    mrmovq (%r9), %rcx # same but for r9
+    rmmovq %rcx, (%r8) # move contents of rcx into address pointed at by r8
+    rmmovq %rax, (%r9) 
+    ret
+
+    .pos 0x200
+stack:
